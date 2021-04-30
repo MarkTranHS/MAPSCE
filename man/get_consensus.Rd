@@ -7,16 +7,16 @@
 get_consensus(data, this_patient, consensus = TRUE, consensus.only = F)
 }
 \arguments{
-\item{data}{summarised mapping results}
+\item{data}{summarised mapping results from mapsce function}
 
 \item{this_patient}{patient ID}
 
-\item{consensus}{logical}
+\item{consensus}{printing of the consensus}
 
-\item{consensus.only}{logical}
+\item{consensus.only}{limiting output to just the consensus}
 }
 \value{
-returns a consensus matrix
+returns a matrix with consensus copy number states for every clone in a tree, labeling no consensus as NAs
 }
 \description{
 \code{get_consensus} finds a consensus copy number results for a particular mapping result

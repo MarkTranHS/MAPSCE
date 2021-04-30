@@ -2,11 +2,11 @@
 #'
 #' `get_consensus` finds a consensus copy number results for a particular mapping result
 #'
-#' @param data summarised mapping results
+#' @param data summarised mapping results from mapsce function
 #' @param this_patient patient ID
-#' @param consensus logical
-#' @param consensus.only logical
-#' @return returns a consensus matrix
+#' @param consensus printing of the consensus
+#' @param consensus.only limiting output to just the consensus
+#' @return returns a matrix with consensus copy number states for every clone in a tree, labeling no consensus as NAs
 #'
 #' @export
 

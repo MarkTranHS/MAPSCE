@@ -24,17 +24,17 @@ mapsce(
 
 \item{mutation_ccf}{mutational CCF matrix}
 
-\item{tree}{tree matrix}
+\item{tree}{matrix with tree topology}
 
-\item{bootstraps}{number of bootstraps to run}
+\item{bootstraps}{number of bootstraps}
 
-\item{print_raw_matrix}{logical}
+\item{print_raw_matrix}{printing of raw results}
 
-\item{print_duration}{printing time running}
+\item{print_duration}{printing of the time taken to run}
 }
 \value{
-Returns tibble with summarised bootstrapped mapping results
+a matrix with branch ID, copy number states before and after, residual sum of squares, number of clones and regions, whether the branch was the trunk the bic of the branch and the bayes factor comparison.
 }
 \description{
-\code{mapsce} returns branch test results.
+\code{mapsce} returns a matrix with a branch test for every single branch of a tree
 }

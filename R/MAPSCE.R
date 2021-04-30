@@ -1,16 +1,17 @@
 #' mapsce
 #'
-#' `mapsce` returns branch test results.
+#' `mapsce` returns a matrix with a branch test for every single branch of a tree
 #'
 #' @param patient patient ID
 #' @param copy_number observed copy numbers
 #' @param cluster_ccf CCF matrix
 #' @param mutation_ccf mutational CCF matrix
-#' @param tree tree matrix
-#' @param bootstraps number of bootstraps to run
-#' @param print_raw_matrix logical
-#' @param print_duration printing time running
-#' @return Returns tibble with summarised bootstrapped mapping results
+#' @param tree matrix with tree topology
+#' @param bootstraps number of bootstraps
+#' @param print_raw_matrix printing of raw results
+#' @param print_duration printing of the time taken to run
+#' @return a matrix with branch ID, copy number states before and after, residual sum of squares, number of clones and regions, whether the branch was the trunk the bic of the branch and the bayes factor comparison.
+#'
 #'
 #' @export
 #'
