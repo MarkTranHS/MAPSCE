@@ -6,7 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of MAPSCE is to …
+The goal of MAPSCE is to allow users for quick mapping of subclonal
+events on the tumour evolutionary trees.
 
 ## Installation
 
