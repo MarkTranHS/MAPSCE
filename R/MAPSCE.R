@@ -267,12 +267,3 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
 
   return(summarised_results)
 }
-
-
-#https://debruine.github.io/tutorials/your-first-r-package-with-unit-tests.html
-#cannot do 1.4.3 Imports
-#usethis::use_pipe() leads to error
-#✓ Setting active project to '/Users/marktran/Desktop/R/MAPSCE'
-#Error: Project 'MAPSCE' does not use roxygen2.
-#`use_pipe()` can not work without it.
-#You might just need to run `devtools::document()` once, then try again.
