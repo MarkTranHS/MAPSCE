@@ -38,3 +38,8 @@ a matrix with branch ID, copy number states before and after, residual sum of sq
 \description{
 \code{mapsce} returns a matrix with a branch test for every single branch of a tree
 }
+\examples{
+data(example_data.RData)
+mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree) #returns a tibble with branch 7 as the best result
+
+}

@@ -12,6 +12,9 @@
 #' @param print_duration printing of the time taken to run
 #' @return a matrix with branch ID, copy number states before and after, residual sum of squares, number of clones and regions, whether the branch was the trunk the bic of the branch and the bayes factor comparison.
 #'
+#'@examples
+#'data(example_data.RData)
+#'mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree) #returns a tibble with branch 7 as the best result
 #'
 #' @export
 #'
