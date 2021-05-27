@@ -10,11 +10,25 @@
 #' @param bootstraps number of bootstraps
 #' @param print_raw_matrix printing of raw results
 #' @param print_duration printing of the time taken to run
-#' @return a matrix with branch ID, copy number states before and after, residual sum of squares, number of clones and regions, whether the branch was the trunk the bic of the branch and the bayes factor comparison.
+#' @return a tibble with column names:
+#' \itemize{
+#'   \item branch. branch ID
+#'   \item before. copy number state before
+#'   \item after. copy number state after
+#'   \item rss. average residual square of sums of all bootstraps
+#'   \item btn. how many bootstrapped BICs were better than the null's BIC
+#'   \item number_of_regions. number of regions
+#'   \item nclones. number of clones or branches.
+#'   \item null. whether the branch is a trunk or not.
+#'   \item bic. average bic for all bootstraps calculated from mean RSS
+#'   \item bf. the strength of evidence of bayes factor comparison
+#'   \item evid. 1 for good results based on the Bayes Factor comparison and btn.
+#' }
 #'
 #'@examples
 #'data(example_data.RData)
-#'mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree) #returns a tibble with branch 7 as the best result
+#'mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree)
+#'#returns a tibble with branch 7 as the best result
 #'
 #' @export
 #'
@@ -31,7 +45,7 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
     stop("missing copy number")
   }
   if(any(is.na(copy_number))){
-    stop("missing observed copy number")
+    stop("copy number NA")
   }
   if(ncol(cluster_ccf)==1){
     stop("requires multi region data")

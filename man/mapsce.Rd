@@ -33,13 +33,27 @@ mapsce(
 \item{print_duration}{printing of the time taken to run}
 }
 \value{
-a matrix with branch ID, copy number states before and after, residual sum of squares, number of clones and regions, whether the branch was the trunk the bic of the branch and the bayes factor comparison.
+a tibble
+\itemize{
+\item branch. branch ID
+\item before. copy number state before
+\item after. copy number state after
+\item rss. average residual square of sums of all bootstraps
+\item btn. how many bootstrapped BICs were better than the null's BIC
+\item number_of_regions. number of regions
+\item nclones. number of clones or branches.
+\item null. whether the branch is a trunk or not.
+\item bic. average bic for all bootstraps calculated from mean RSS
+\item bf. the strength of evidence of bayes factor comparison
+\item evid. 1 for good results based on the Bayes Factor comparison and btn.
+}
 }
 \description{
 \code{mapsce} returns a matrix with a branch test for every single branch of a tree
 }
 \examples{
 data(example_data.RData)
-mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree) #returns a tibble with branch 7 as the best result
+mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree)
+#returns a tibble with branch 7 as the best result
 
 }
