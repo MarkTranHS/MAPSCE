@@ -15,5 +15,5 @@ You can install the released version of demopckg from
 [GitHub](https://github.com) with:
 
 ``` r
-devtools::install_github("TarkMran/MAPSCE")
+devtools::install_github("MarkTranHS/MAPSCE")
 ```
