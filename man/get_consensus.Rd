@@ -4,12 +4,12 @@
 \alias{get_consensus}
 \title{get_consensus}
 \usage{
-get_consensus(data, this_patient, consensus = TRUE, consensus.only = F)
+get_consensus(data, tree, consensus = TRUE, consensus.only = F)
 }
 \arguments{
 \item{data}{summarised mapping results from mapsce function}
 
-\item{this_patient}{patient ID}
+\item{tree}{tree}
 
 \item{consensus}{printing of the consensus}
 
@@ -20,4 +20,19 @@ returns a matrix with consensus copy number states for every clone in a tree, la
 }
 \description{
 \code{get_consensus} finds a consensus copy number results for a particular mapping result
+}
+\examples{
+data(example_data)
+
+mapsce_result <- mapsce(
+example_patient_ID,
+example_cn,
+example_ccf,
+example_mutational_ccf,
+example_tree)
+
+get_consensus(mapsce_result, example_tree)
+# returns a consensus matrix for this example mapsce result
+
+
 }

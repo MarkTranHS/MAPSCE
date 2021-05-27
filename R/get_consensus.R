@@ -3,15 +3,29 @@
 #' `get_consensus` finds a consensus copy number results for a particular mapping result
 #'
 #' @param data summarised mapping results from mapsce function
-#' @param this_patient patient ID
+#' @param tree tree
 #' @param consensus printing of the consensus
 #' @param consensus.only limiting output to just the consensus
 #' @return returns a matrix with consensus copy number states for every clone in a tree, labeling no consensus as NAs
 #'
+#' @examples
+#' data(example_data)
+#'
+#' mapsce_result <- mapsce(
+#' example_patient_ID,
+#' example_cn,
+#' example_ccf,
+#' example_mutational_ccf,
+#' example_tree)
+#'
+#' get_consensus(mapsce_result, example_tree)
+#' # returns a consensus matrix for this example mapsce result
+#'
+#'
 #' @export
 
 ## Consensus function
-get_consensus <- function(data, this_patient, consensus=TRUE, consensus.only=F){
+get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
   null <- data %>%
     dplyr::filter(null == "yes") %>%
     dplyr::pull(branch)
@@ -51,8 +65,8 @@ get_consensus <- function(data, this_patient, consensus=TRUE, consensus.only=F){
     return(invisible(this_index))
   }
 
-  patient_indexing <- function(this_patient){
-    tree <<- all.pyclone_trees[[this_patient]]$manual_tree
+  patient_indexing <- function(this_tree){
+    tree <<- this_tree
     tree <<- tibble::tibble(parent = tree[,1], child = tree[,2])
     tree_nodes <<- tibble::tibble(node_id = c(1:length(unique(union(tree$parent, tree$child)))),
                                   branch = tree$parent %>% union(tree$child) %>% unique,
@@ -60,12 +74,11 @@ get_consensus <- function(data, this_patient, consensus=TRUE, consensus.only=F){
                                   right_index = NA)
     indexing_branches()
     tree_nodes <<- tree_nodes %>%
-      dplyr::select(-node_id) %>%
-      dplyr::mutate(patient = gsub("LTX0", "LTX", this_patient))
+      dplyr::select(-node_id)
     return(tree_nodes)
   }
 
-  patient_indexing(gsub("LTX", "LTX0", this_patient))
+  patient_indexing(tree)
   c_tree <- matrix(nrow = length(all_branches), ncol = nrow(tree_nodes))
   colnames(c_tree) <- tree_nodes[,1] %>% dplyr::pull()
   rownames(c_tree) <- all_branches
