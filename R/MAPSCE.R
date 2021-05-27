@@ -17,12 +17,13 @@
 #'   \item after. copy number state after
 #'   \item rss. average residual square of sums of all bootstraps
 #'   \item btn. how many bootstrapped BICs were better than the null's BIC
-#'   \item number_of_regions. number of regions
+#'   \item nregions. number of regions
 #'   \item nclones. number of clones or branches.
 #'   \item null. whether the branch is a trunk or not.
 #'   \item bic. average bic for all bootstraps calculated from mean RSS
 #'   \item bf. the strength of evidence of bayes factor comparison
-#'   \item evid. 1 for good results based on the Bayes Factor comparison and btn.
+#'   \item evid. 1 for good results based on the Bayes Factor comparison and btn
+#'   \item index. ordering of results.
 #' }
 #'
 #'@examples
@@ -103,7 +104,7 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
   #List of all clone IDs from tree - continue results
   clones <- unique(c(tree[, 1], tree[, 2]))
   number_of_clones <- length(clones)
-  number_of_regions <- (ncol(cluster_ccf))
+  nregions <- (ncol(cluster_ccf))
   results_matrix <- matrix(ncol=8, nrow=bootstraps*number_of_clones) #preparing matrix of results
   colnames(results_matrix) <- c("branch", "before", "after", "rss", "bic", "nregions", "nclones", "null")
 
@@ -118,18 +119,18 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
       dplyr::pull(PycloneCluster) %>%
       unique() %>%
       sort()
-    pyclone_ccf <- matrix(ncol=number_of_regions, nrow=length(all_clusters)) #preparing matrix for resampling
+    pyclone_ccf <- matrix(ncol=nregions, nrow=length(all_clusters)) #preparing matrix for resampling
     for (this_cluster in all_clusters) {
       all_mutations <- mutation_ccf %>%
         dplyr::filter(PycloneCluster == this_cluster)
-      for (this_region in 1:number_of_regions) {
+      for (this_region in 1:nregions) {
         pyclone_ccf[this_cluster,this_region] <- c(mean(sample(dplyr::pull(all_mutations[,this_region]),
                                                                nrow(all_mutations), replace=T)))
       }
     }
     pyclone_ccf <- pyclone_ccf*100
     rownames(pyclone_ccf) <- all_clusters
-    colnames(pyclone_ccf) <- paste(patient, paste("R", 1:number_of_regions, sep=""))
+    colnames(pyclone_ccf) <- paste(patient, paste("R", 1:nregions, sep=""))
 
     #Get recuded ccf and clone fraction
     reduced_pyclone_ccf <- reduce_pyclone_ccf(pyclone_ccf, tree)
@@ -195,7 +196,7 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
         results_matrix[row_number,4] <- as.numeric(rsum) #rss
         results_matrix[row_number,5] <- as.numeric(length(copy_number) * log(rsum/length(copy_number)) +
                                                      k*log(length(copy_number))) #bic
-        results_matrix[row_number,6] <- as.numeric(number_of_regions) #number of regions
+        results_matrix[row_number,6] <- as.numeric(nregions) #number of regions
         results_matrix[row_number,7] <- as.numeric(number_of_clones) #number of clones
         results_matrix[row_number,8] <- null #null
         row_number <- row_number+1
@@ -219,16 +220,16 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
     dplyr::summarize(before = mean(as.numeric(before), na.rm=T),
               after = mean(as.numeric(after), na.rm=T),
               rss = mean(as.numeric(rss), na.rm=T),
-              btn = ifelse(unique(null) == "yes", 101, sum(bic <= null_bic) / length(bic) * 100),
+              btn = ifelse(unique(null) == "yes", 101, sum(as.numeric(bic) <= as.numeric(null_bic)) / length(bic) * 100),
               bic = mean(as.numeric(bic), na.rm=T),
-              number_of_regions = mean(as.numeric(number_of_regions), na.rm=T),
+              nregions = mean(as.numeric(nregions), na.rm=T),
               nclones = mean(as.numeric(nclones), na.rm=T),
               null = unique(null)) %>%
     dplyr::arrange(bic)
 
   summarised_results <- summarised_results %>%
     dplyr::select(-bic) %>%
-    dplyr::mutate(bic = number_of_regions * log(rss/number_of_regions) + ifelse(null == "yes", 1, 2) * log(number_of_regions))
+    dplyr::mutate(bic = nregions * log(rss/nregions) + ifelse(null == "yes", 1, 2) * log(nregions))
 
   summarised_results <- summarised_results %>%
     dplyr::mutate(bic = ifelse(bic==-Inf, -1*10^100, bic))
@@ -280,7 +281,8 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
 
   summarised_results <- summarised_results %>%
     dplyr::arrange(desc(evid), bic) %>%
-    dplyr::mutate(index = dplyr::row_number())
+    dplyr::mutate(index = dplyr::row_number()) %>%
+    dplyr::select(-top_bic, -bic_diff)
 
   return(summarised_results)
 }
