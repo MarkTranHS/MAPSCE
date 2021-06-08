@@ -53,7 +53,7 @@ a tibble with column names:
 \code{mapsce} returns a matrix with a branch test for every single branch of a tree
 }
 \examples{
-data(example_data.RData)
+data(example_data)
 mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree)
 #returns a tibble with branch 7 as the best result
 

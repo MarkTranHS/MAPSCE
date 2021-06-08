@@ -27,7 +27,7 @@
 #' }
 #'
 #'@examples
-#'data(example_data.RData)
+#'data(example_data)
 #'mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree)
 #'#returns a tibble with branch 7 as the best result
 #'
@@ -53,52 +53,6 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
   }
   if(ncol(cluster_ccf) != length(copy_number)){
     stop("mismatch in number of observed copy numbers vs number of regions")
-  }
-
-  #Adjusting CCF to match the tree branches if there are less branches than trees
-  adjust_clone_fraction_from_ccf <- function(clone_fraction, tree, node) {
-    for (descendent in tree[tree[, 1] == node, 2]) {
-      clone_fraction[node, ] <- clone_fraction[node, ] - clone_fraction[descendent, ]
-      clone_fraction <- adjust_clone_fraction_from_ccf(clone_fraction, tree, descendent)
-    }
-    return(clone_fraction)
-  }
-  #Setting trunk from tree to feed into recursive function
-  get_clone_fraction_from_ccf <- function(ccf, tree) {
-    trunk <- setdiff(tree[, 1], tree[, 2])
-    stopifnot(length(trunk) == 1)
-    clone_fraction <- adjust_clone_fraction_from_ccf(ccf, tree, trunk)
-    return(clone_fraction)
-  }
-  #Reducing pyclone trees
-  reduce_pyclone_ccf <- function(ccf, tree) {
-    nodes <- unique(c(tree[, 1], tree[, 2]))
-    pyclone_ccf <- ccf[nodes, , drop = FALSE]
-    return(pyclone_ccf)
-  }
-  #Making a nested set matrix - 1/0
-  get_nested_set_from_tree <- function(tree) {
-    clones <- unique(c(tree[, 1], tree[, 2]))
-    number_of_clones <- length(clones)
-
-    nested_set <- matrix(0, number_of_clones, number_of_clones)
-    rownames(nested_set) <- clones
-    colnames(nested_set) <- clones
-    nested_set[tree] <- 1
-    n <- 0
-    while (n < sum(nested_set)) {
-      n <- sum(nested_set)
-      ancestors <- list()
-      for (i in 1:number_of_clones) {
-        ancestors[[i]] <- which(nested_set[, i] == 1)
-      }
-      for (i in 1:number_of_clones) {
-        for (j in ancestors[[i]]) {
-          nested_set[ancestors[[j]], i] <- 1
-        }
-      }
-    }
-    return(nested_set)
   }
 
   #List of all clone IDs from tree - continue results
