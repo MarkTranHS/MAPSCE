@@ -6,7 +6,7 @@
 #'@param tree tree
 #'
 #' @return reduced cluster ccf
-#'
+#' @keywords internal
 #' @export
 #'
 

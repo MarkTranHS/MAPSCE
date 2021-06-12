@@ -4,7 +4,7 @@
 #'
 #' @param tree tree
 #' @return a matrix
-#'
+#' @keywords internal
 #' @export
 #'
 

@@ -8,7 +8,7 @@
 #'
 #'@return adjusted clone CCF
 #'
-#'
+#' @keywords internal
 #' @export
 #'
 
