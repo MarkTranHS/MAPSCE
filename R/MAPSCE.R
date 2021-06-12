@@ -54,6 +54,11 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
   if(ncol(cluster_ccf) != length(copy_number)){
     stop("mismatch in number of observed copy numbers vs number of regions")
   }
+  if(length(copy_number) == 2){
+    print("running mapsce2r - mapsce for 2 regions")
+    summarised_results <- mapsce2r(patient, copy_number, cluster_ccf, tree)
+    return(summarised_results)
+  }
 
   #List of all clone IDs from tree - continue results
   clones <- unique(c(tree[, 1], tree[, 2]))
