@@ -7,7 +7,6 @@
 #'
 #' @return a matrix
 #' @keywords internal
-#' @export
 #'
 
 #Setting trunk from tree to feed into recursive function

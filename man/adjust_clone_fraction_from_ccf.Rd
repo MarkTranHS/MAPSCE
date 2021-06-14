@@ -19,3 +19,4 @@ adjusted clone CCF
 \description{
 \code{adjust_clone_fraction_from_ccf} returns adjusted clone CCF based on tree
 }
+\keyword{internal}

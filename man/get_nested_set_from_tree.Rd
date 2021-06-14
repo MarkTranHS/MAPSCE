@@ -15,3 +15,4 @@ a matrix
 \description{
 \code{get_nested_set_from_tree} returns a nested set from a tree
 }
+\keyword{internal}

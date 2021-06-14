@@ -17,3 +17,4 @@ a matrix
 \description{
 \code{get_clone_fraction_from_ccf} returns clone CCF from cluster CCF
 }
+\keyword{internal}

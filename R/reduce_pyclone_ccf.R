@@ -7,7 +7,6 @@
 #'
 #' @return reduced cluster ccf
 #' @keywords internal
-#' @export
 #'
 
 #Reducing pyclone trees

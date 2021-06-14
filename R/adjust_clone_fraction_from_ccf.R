@@ -9,7 +9,6 @@
 #'@return adjusted clone CCF
 #'
 #' @keywords internal
-#' @export
 #'
 
 #Adjusting CCF to match the tree branches if there are less branches than trees
