@@ -12,7 +12,6 @@
 #' data(example_data)
 #'
 #' mapsce_result <- mapsce(
-#' example_patient_ID,
 #' example_cn,
 #' example_ccf,
 #' example_mutational_ccf,
@@ -65,20 +64,16 @@ get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
     return(invisible(this_index))
   }
 
-  patient_indexing <- function(this_tree){
-    tree <<- this_tree
-    tree <<- tibble::tibble(parent = tree[,1], child = tree[,2])
-    tree_nodes <<- tibble::tibble(node_id = c(1:length(unique(union(tree$parent, tree$child)))),
-                                  branch = tree$parent %>% union(tree$child) %>% unique,
-                                  left_index = NA,
-                                  right_index = NA)
-    indexing_branches()
-    tree_nodes <<- tree_nodes %>%
-      dplyr::select(-node_id)
-    return(tree_nodes)
-  }
+  tree <- tibble::tibble(parent = tree[,1], child = tree[,2])
 
-  patient_indexing(tree)
+  tree_nodes <- tibble::tibble(node_id = c(1:length(unique(union(tree$parent, tree$child)))),
+                                branch = tree$parent %>% union(tree$child) %>% unique,
+                                left_index = NA,
+                                right_index = NA)
+  indexing_branches()
+  tree_nodes <- tree_nodes %>%
+    dplyr::select(-node_id)
+
   c_tree <- matrix(nrow = length(all_branches), ncol = nrow(tree_nodes))
   colnames(c_tree) <- tree_nodes[,1] %>% dplyr::pull()
   rownames(c_tree) <- all_branches

@@ -25,7 +25,6 @@ returns a matrix with consensus copy number states for every clone in a tree, la
 data(example_data)
 
 mapsce_result <- mapsce(
-example_patient_ID,
 example_cn,
 example_ccf,
 example_mutational_ccf,
