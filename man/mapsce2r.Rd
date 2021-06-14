@@ -5,7 +5,6 @@
 \title{mapsce2r}
 \usage{
 mapsce2r(
-  patient,
   copy_number,
   cluster_ccf,
   tree,
@@ -14,8 +13,6 @@ mapsce2r(
 )
 }
 \arguments{
-\item{patient}{patient ID}
-
 \item{copy_number}{observed copy numbers}
 
 \item{cluster_ccf}{CCF matrix}
@@ -33,6 +30,7 @@ a tibble with column names:
 \item before. copy number state before
 \item after. copy number state after
 \item rss. residual square of sums
+\item btn. how many bootstrapped BICs were better than the null's BI
 \item nregions. number of regions
 \item nclones. number of clones or branches.
 \item null. whether the branch is a trunk or not.
@@ -47,7 +45,7 @@ a tibble with column names:
 }
 \examples{
 data(example_data)
-mapsce2r(example_patient_ID_2r, example_cn_2r, example_ccf_2r, example_tree_2r)
+mapsce2r(example_cn_2r, example_ccf_2r, example_tree_2r)
 #returns a tibble with branch 7 as the best result
 
 }

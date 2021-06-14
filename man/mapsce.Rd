@@ -5,7 +5,6 @@
 \title{mapsce}
 \usage{
 mapsce(
-  patient,
   copy_number,
   cluster_ccf,
   mutation_ccf,
@@ -16,8 +15,6 @@ mapsce(
 )
 }
 \arguments{
-\item{patient}{patient ID}
-
 \item{copy_number}{observed copy numbers}
 
 \item{cluster_ccf}{CCF matrix}
@@ -54,7 +51,7 @@ a tibble with column names:
 }
 \examples{
 data(example_data)
-mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree)
+mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree)
 #returns a tibble with branch 7 as the best result
 
 }

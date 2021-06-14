@@ -2,7 +2,6 @@
 #'
 #' `mapsce2r` returns a matrix with a branch test for every single branch of a tree
 #'
-#' @param patient patient ID
 #' @param copy_number observed copy numbers
 #' @param cluster_ccf CCF matrix
 #' @param tree matrix with tree topology
@@ -14,6 +13,7 @@
 #'   \item before. copy number state before
 #'   \item after. copy number state after
 #'   \item rss. residual square of sums
+#'   \item btn. how many bootstrapped BICs were better than the null's BI
 #'   \item nregions. number of regions
 #'   \item nclones. number of clones or branches.
 #'   \item null. whether the branch is a trunk or not.
@@ -25,14 +25,14 @@
 #'
 #'@examples
 #'data(example_data)
-#'mapsce2r(example_patient_ID_2r, example_cn_2r, example_ccf_2r, example_tree_2r)
+#'mapsce2r(example_cn_2r, example_ccf_2r, example_tree_2r)
 #'#returns a tibble with branch 7 as the best result
 #'
 #' @export
 #'
 
 ## MAPSCE algorithm
-mapsce2r <- function(patient, copy_number, cluster_ccf, tree, print_raw_matrix="no", print_duration="yes"){
+mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", print_duration="yes"){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -190,6 +190,9 @@ mapsce2r <- function(patient, copy_number, cluster_ccf, tree, print_raw_matrix="
     }
   }
 
+  ## Add btn row for consistency with original function
+  summarised_results %>%
+    dplyr::mutate(btn = NA)
 
   if(print_raw_matrix=="yes"){print(summarised_results)}
   if(print_duration=="yes"){print(Sys.time()-start.time)}

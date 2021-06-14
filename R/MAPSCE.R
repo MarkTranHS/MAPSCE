@@ -2,7 +2,6 @@
 #'
 #' `mapsce` returns a matrix with a branch test for every single branch of a tree
 #'
-#' @param patient patient ID
 #' @param copy_number observed copy numbers
 #' @param cluster_ccf CCF matrix
 #' @param mutation_ccf mutational CCF matrix
@@ -28,14 +27,14 @@
 #'
 #'@examples
 #'data(example_data)
-#'mapsce(example_patient_ID, example_cn, example_ccf, example_mutational_ccf, example_tree)
+#'mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree)
 #'#returns a tibble with branch 7 as the best result
 #'
 #' @export
 #'
 
 ## MAPSCE algorithm
-mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix="no", print_duration="yes"){
+mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix="no", print_duration="yes"){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -89,7 +88,7 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
     }
     pyclone_ccf <- pyclone_ccf*100
     rownames(pyclone_ccf) <- all_clusters
-    colnames(pyclone_ccf) <- paste(patient, paste("R", 1:nregions, sep=""))
+    colnames(pyclone_ccf) <- paste0("R", 1:nregions)
 
     #Get recuded ccf and clone fraction
     reduced_pyclone_ccf <- reduce_pyclone_ccf(pyclone_ccf, tree)
@@ -241,7 +240,7 @@ mapsce <- function(patient, copy_number, cluster_ccf, mutation_ccf, tree, bootst
   summarised_results <- summarised_results %>%
     dplyr::arrange(desc(evid), bic) %>%
     dplyr::mutate(index = dplyr::row_number()) %>%
-    dplyr::select(-top_bic, -bic_diff)
+    dplyr::select(-top_bic, -bic_diff, -null_bic)
 
   return(summarised_results)
 }
