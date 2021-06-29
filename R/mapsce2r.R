@@ -190,10 +190,6 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", prin
     }
   }
 
-  ## Add btn row for consistency with original function
-  summarised_results %>%
-    dplyr::mutate(btn = NA)
-
   if(print_raw_matrix=="yes"){print(summarised_results)}
   if(print_duration=="yes"){print(Sys.time()-start.time)}
 
@@ -201,6 +197,19 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", prin
     dplyr::arrange(desc(evid), bic) %>%
     dplyr::mutate(index = dplyr::row_number()) %>%
     dplyr::select(-top_bic, -bic_diff, -null_bic)
+
+  summarised_results <- summarised_results %>%
+    dplyr::mutate(before = as.numeric(before),
+                     after = as.numeric(after),
+                     rss = as.numeric(rss),
+                     btn = NA,
+                     bic = as.numeric(bic),
+                     nregions = as.numeric(nregions),
+                     nclones = as.numeric(nclones),
+                     bf = as.numeric(bf),
+                    evid = as.numeric(evid),
+                    index = as.integer(index)
+    )
 
   return(summarised_results)
 }

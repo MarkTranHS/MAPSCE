@@ -34,35 +34,6 @@ get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
 
   tree_nodes <- NULL
 
-  indexing_branches <- function(this_node, this_index) {
-    if (missing(this_node)) {
-      this_node <- 1
-    } else {
-      this_node <- tree_nodes %>%
-        dplyr::filter(branch==this_node) %>%
-        dplyr::pull(node_id)
-    }
-    if (missing(this_index)) {
-      this_index <- 1
-    }
-
-    tree_nodes <<- tree_nodes %>%
-      dplyr::mutate(left_index = ifelse(node_id == this_node, this_index, left_index))
-    this_index <- this_index +1
-    node <- tree_nodes %>%
-      dplyr::filter(node_id == this_node) %>%
-      dplyr::pull(branch)
-    children <- tree %>%
-      dplyr::filter(parent == node) %>%
-      dplyr::pull(child)
-    for (this_child_node_id in children) {
-      this_index <- indexing_branches(this_child_node_id, this_index)
-    }
-    tree_nodes <<- tree_nodes %>%
-      dplyr::mutate(right_index = ifelse(node_id == this_node, this_index, right_index))
-    this_index <- this_index + 1
-    return(invisible(this_index))
-  }
 
   tree <- tibble::tibble(parent = tree[,1], child = tree[,2])
 
@@ -70,7 +41,40 @@ get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
                                 branch = tree$parent %>% union(tree$child) %>% unique,
                                 left_index = NA,
                                 right_index = NA)
-  indexing_branches()
+
+
+  # indexing_branches <- function(this_node, this_index) {
+  #   if (missing(this_node)) {
+  #     this_node <- 1
+  #   } else {
+  #     this_node <- tree_nodes %>%
+  #       dplyr::filter(branch==this_node) %>%
+  #       dplyr::pull(node_id)
+  #   }
+  #   if (missing(this_index)) {
+  #     this_index <- 1
+  #   }
+  #
+  #
+  #   tree_nodes <<- tree_nodes %>%
+  #     dplyr::mutate(left_index = ifelse(node_id == this_node, this_index, left_index))
+  #   this_index <- this_index +1
+  #   node <- tree_nodes %>%
+  #     dplyr::filter(node_id == this_node) %>%
+  #     dplyr::pull(branch)
+  #   children <- tree %>%
+  #     dplyr::filter(parent == node) %>%
+  #     dplyr::pull(child)
+  #   for (this_child_node_id in children) {
+  #     this_index <- indexing_branches(this_child_node_id, this_index)
+  #   }
+  #   tree_nodes <<- tree_nodes %>%
+  #     dplyr::mutate(right_index = ifelse(node_id == this_node, this_index, right_index))
+  #   this_index <- this_index + 1
+  #   return(invisible(this_index))
+  # }
+  #indexing_branches()
+  index_tree(tree)
   tree_nodes <- tree_nodes %>%
     dplyr::select(-node_id)
 

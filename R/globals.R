@@ -3,4 +3,4 @@ utils::globalVariables(c("branch", "evid", "node_id", "left_index", "tree", "rig
                          "PycloneCluster", "bic", "rss", "nclones",
                          ".", "bic_diff", "bf", "btn", "desc", "<<-", ".data",
                          "this_node", "this_index", "this_tree",
-                         "tree_nodes", "parent", "child", "tree", "patient"))
+                         "tree_nodes", "parent_id", "child", "tree", "patient", "index", "parent"))
