@@ -55,7 +55,7 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
   }
   if(length(copy_number) == 2){
     print("running mapsce2r - mapsce for 2 regions")
-    summarised_results <- mapsce2r(patient, copy_number, cluster_ccf, tree)
+    summarised_results <- mapsce2r(copy_number, cluster_ccf, tree)
     return(summarised_results)
   }
 
