@@ -169,6 +169,7 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", prin
                               rep(., length(all_branches)))
 
   summarised_results <- summarised_results %>%
+    dplyr::ungroup() %>%
     cbind(top_bic) %>%
     dplyr::as_tibble() %>%
     dplyr::arrange(bic) %>%
