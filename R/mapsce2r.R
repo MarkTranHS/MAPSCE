@@ -26,7 +26,7 @@
 #'@examples
 #'data(example_data)
 #'mapsce2r(example_cn_2r, example_ccf_2r, example_tree_2r)
-#'#returns a tibble with branch 7 as the best result
+#'#returns a tibble with branch 2 as the best result
 #'
 #' @export
 #'
