@@ -15,15 +15,15 @@ mapsce(
 )
 }
 \arguments{
-\item{copy_number}{observed copy numbers}
+\item{copy_number}{a numeric vector with copy number values ordered by sample}
 
-\item{cluster_ccf}{CCF matrix}
+\item{cluster_ccf}{a matrix with mean CCF values for clones in rows and samples (same order as in copy_number) in columns}
 
-\item{mutation_ccf}{mutational CCF matrix}
+\item{mutation_ccf}{a tibble or data frame where the first columns contain the mutational CCF values for the  samples (same order as in copy_number) in columns. Tw of the columns in this object need to be "PycloneCluster" and "CleanCluster", the former being the clone assignment and the latter being the PyClone filter (1 for valid clusters, 0 for clusters to be ignored)}
 
-\item{tree}{matrix with tree topology}
+\item{tree}{a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.}
 
-\item{bootstraps}{number of bootstraps}
+\item{bootstraps}{number of bootstraps for reclustering of the CCF}
 
 \item{print_raw_matrix}{printing of raw results}
 

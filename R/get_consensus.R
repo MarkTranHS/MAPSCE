@@ -2,8 +2,8 @@
 #'
 #' `get_consensus` finds a consensus copy number results for a particular mapping result
 #'
-#' @param data summarised mapping results from mapsce function
-#' @param tree tree
+#' @param data a tibble with summarised mapping results, the output of using mapsce function
+#' @param tree a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.
 #' @param consensus printing of the consensus
 #' @param consensus.only limiting output to just the consensus
 #' @return returns a matrix with consensus copy number states for every clone in a tree, labeling no consensus as NAs

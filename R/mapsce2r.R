@@ -2,9 +2,9 @@
 #'
 #' `mapsce2r` returns a matrix with a branch test for every single branch of a tree
 #'
-#' @param copy_number observed copy numbers
-#' @param cluster_ccf CCF matrix
-#' @param tree matrix with tree topology
+#' @param copy_number a numeric vector with copy number values ordered by sample
+#' @param cluster_ccf a matrix with mean CCF values for clones in rows and samples (same order as in copy_number) in columns
+#' @param tree a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.
 #' @param print_raw_matrix printing of raw results
 #' @param print_duration printing of the time taken to run
 #' @return a tibble with column names:

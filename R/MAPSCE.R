@@ -2,11 +2,11 @@
 #'
 #' `mapsce` returns a matrix with a branch test for every single branch of a tree
 #'
-#' @param copy_number observed copy numbers
-#' @param cluster_ccf CCF matrix
-#' @param mutation_ccf mutational CCF matrix
-#' @param tree matrix with tree topology
-#' @param bootstraps number of bootstraps
+#' @param copy_number a numeric vector with copy number values ordered by sample
+#' @param cluster_ccf a matrix with mean CCF values for clones in rows and samples (same order as in copy_number) in columns
+#' @param mutation_ccf a tibble or data frame where the first columns contain the mutational CCF values for the  samples (same order as in copy_number) in columns. Tw of the columns in this object need to be "PycloneCluster" and "CleanCluster", the former being the clone assignment and the latter being the PyClone filter (1 for valid clusters, 0 for clusters to be ignored)
+#' @param tree a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.
+#' @param bootstraps number of bootstraps for reclustering of the CCF
 #' @param print_raw_matrix printing of raw results
 #' @param print_duration printing of the time taken to run
 #' @return a tibble with column names:

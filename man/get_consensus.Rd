@@ -7,9 +7,9 @@
 get_consensus(data, tree, consensus = TRUE, consensus.only = F)
 }
 \arguments{
-\item{data}{summarised mapping results from mapsce function}
+\item{data}{a tibble with summarised mapping results, the output of using mapsce function}
 
-\item{tree}{tree}
+\item{tree}{a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.}
 
 \item{consensus}{printing of the consensus}
 

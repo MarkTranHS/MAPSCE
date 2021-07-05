@@ -13,11 +13,11 @@ mapsce2r(
 )
 }
 \arguments{
-\item{copy_number}{observed copy numbers}
+\item{copy_number}{a numeric vector with copy number values ordered by sample}
 
-\item{cluster_ccf}{CCF matrix}
+\item{cluster_ccf}{a matrix with mean CCF values for clones in rows and samples (same order as in copy_number) in columns}
 
-\item{tree}{matrix with tree topology}
+\item{tree}{a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.}
 
 \item{print_raw_matrix}{printing of raw results}
 
@@ -46,6 +46,6 @@ a tibble with column names:
 \examples{
 data(example_data)
 mapsce2r(example_cn_2r, example_ccf_2r, example_tree_2r)
-#returns a tibble with branch 7 as the best result
+#returns a tibble with branch 2 as the best result
 
 }
