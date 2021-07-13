@@ -25,6 +25,18 @@
 
 ## Consensus function
 get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
+  if(length(tree) == 0) {
+    stop("missing tree")
+  }
+  if(is.data.frame(data) == F) {
+    stop("needs data frame/tibble as input data")
+  }
+  if(length(colnames(data)) != 12) {
+    stop("number of columns in data doesn't match mapsce output")
+  }
+  if(nrow(data) != length(unique(as.vector(tree)))) {
+    stop("mismatch between data input and number of tree nodes")
+  }
   null <- data %>%
     dplyr::filter(null == "yes") %>%
     dplyr::pull(branch)
@@ -43,37 +55,6 @@ get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
                                 right_index = NA)
 
 
-  # indexing_branches <- function(this_node, this_index) {
-  #   if (missing(this_node)) {
-  #     this_node <- 1
-  #   } else {
-  #     this_node <- tree_nodes %>%
-  #       dplyr::filter(branch==this_node) %>%
-  #       dplyr::pull(node_id)
-  #   }
-  #   if (missing(this_index)) {
-  #     this_index <- 1
-  #   }
-  #
-  #
-  #   tree_nodes <<- tree_nodes %>%
-  #     dplyr::mutate(left_index = ifelse(node_id == this_node, this_index, left_index))
-  #   this_index <- this_index +1
-  #   node <- tree_nodes %>%
-  #     dplyr::filter(node_id == this_node) %>%
-  #     dplyr::pull(branch)
-  #   children <- tree %>%
-  #     dplyr::filter(parent == node) %>%
-  #     dplyr::pull(child)
-  #   for (this_child_node_id in children) {
-  #     this_index <- indexing_branches(this_child_node_id, this_index)
-  #   }
-  #   tree_nodes <<- tree_nodes %>%
-  #     dplyr::mutate(right_index = ifelse(node_id == this_node, this_index, right_index))
-  #   this_index <- this_index + 1
-  #   return(invisible(this_index))
-  # }
-  #indexing_branches()
   index_tree(tree)
   tree_nodes <- tree_nodes %>%
     dplyr::select(-node_id)
