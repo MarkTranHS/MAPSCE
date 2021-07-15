@@ -13,7 +13,7 @@ get_consensus(data, tree, consensus = TRUE, consensus.only = F)
 
 \item{consensus}{printing of the consensus}
 
-\item{consensus.only}{limiting output to just the consensus}
+\item{consensus.only}{limiting output to just the consensus, will output a vector instead of a data frame, only works with consensus = TRUE}
 }
 \value{
 returns a matrix with consensus copy number states for every clone in a tree, labeling no consensus as NAs
