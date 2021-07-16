@@ -11,7 +11,7 @@ events on the tumour evolutionary trees.
 
 ## Installation
 
-You can install the released version of demopckg from
+You can install the released version of MAPSCE from
 [GitHub](https://github.com) with:
 
 ``` r
