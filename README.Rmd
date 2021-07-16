@@ -22,7 +22,7 @@ The goal of MAPSCE is to allow users for quick mapping of subclonal events on th
 
 ## Installation
 
-You can install the released version of demopckg from [GitHub](https://github.com) with:
+You can install the released version of MAPSCE from [GitHub](https://github.com) with:
 
 ``` r
 devtools::install_github("MarkTranHS/MAPSCE")
