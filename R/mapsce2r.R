@@ -66,7 +66,6 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", prin
   row_number <- 1 #indexing the row number
 
   pyclone_ccf <- cluster_ccf
-  pyclone_ccf <- pyclone_ccf*100
 
   #Get recuded ccf and clone fraction
   reduced_pyclone_ccf <- reduce_pyclone_ccf(pyclone_ccf, tree)
