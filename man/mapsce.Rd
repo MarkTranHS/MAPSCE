@@ -11,7 +11,8 @@ mapsce(
   tree,
   bootstraps = 100,
   print_raw_matrix = "no",
-  print_duration = "yes"
+  print_duration = "yes",
+  force_mapsce = F
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ mapsce(
 \item{print_raw_matrix}{printing of raw results}
 
 \item{print_duration}{printing of the time taken to run}
+
+\item{force_mapsce}{logical, forcing mapsce to run bootstrapping for patients with 2 regions only}
 }
 \value{
 a tibble with column names:

@@ -9,6 +9,7 @@
 #' @param bootstraps number of bootstraps for reclustering of the CCF
 #' @param print_raw_matrix printing of raw results
 #' @param print_duration printing of the time taken to run
+#' @param force_mapsce logical, forcing mapsce to run bootstrapping for patients with 2 regions only
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -34,7 +35,7 @@
 #'
 
 ## MAPSCE algorithm
-mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix="no", print_duration="yes"){
+mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix="no", print_duration="yes", force_mapsce = F){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -54,9 +55,11 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
     stop("mismatch in number of observed copy numbers vs number of regions")
   }
   if(length(copy_number) == 2){
-    print("running mapsce2r - mapsce for 2 regions")
-    summarised_results <- mapsce2r(copy_number, cluster_ccf, tree)
-    return(summarised_results)
+    if(force_mapsce == F){
+      print("running mapsce2r - mapsce for 2 regions")
+      summarised_results <- mapsce2r(copy_number, cluster_ccf, tree)
+      return(summarised_results)
+    }
   }
 
   #List of all clone IDs from tree - continue results
@@ -73,6 +76,7 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
 
     #Resampling mutations into cluster CCF
     all_clusters <- mutation_ccf %>%
+      dplyr::as_tibble() %>%
       dplyr::filter(CleanCluster == 1) %>%
       dplyr::pull(PycloneCluster) %>%
       unique() %>%
@@ -80,6 +84,7 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
     pyclone_ccf <- matrix(ncol=nregions, nrow=length(all_clusters)) #preparing matrix for resampling
     for (this_cluster in all_clusters) {
       all_mutations <- mutation_ccf %>%
+        dplyr::as_tibble() %>%
         dplyr::filter(PycloneCluster == this_cluster)
       for (this_region in 1:nregions) {
         pyclone_ccf[this_cluster,this_region] <- c(mean(sample(dplyr::pull(all_mutations[,this_region]),
