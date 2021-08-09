@@ -70,25 +70,30 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
   colnames(results_matrix) <- c("branch", "before", "after", "rss", "bic", "nregions", "nclones", "null")
 
 
+  mutation_ccf <- mutation_ccf %>%
+    dplyr::as_tibble()
+  all_clusters <- mutation_ccf %>%
+    dplyr::filter(CleanCluster == 1) %>%
+    dplyr::pull(PycloneCluster) %>%
+    unique() %>%
+    sort()
+  mutation_ccf_by_cluster = list()
+  for (this_cluster in all_clusters) {
+    mutation_ccf_by_cluster[[this_cluster]] <- mutation_ccf %>%
+      dplyr::filter(PycloneCluster == this_cluster)
+  }
+
   row_number <- 1 #indexing the row number
 
   for(this_bootstrap in 1:bootstraps){
 
     #Resampling mutations into cluster CCF
-    all_clusters <- mutation_ccf %>%
-      dplyr::as_tibble() %>%
-      dplyr::filter(CleanCluster == 1) %>%
-      dplyr::pull(PycloneCluster) %>%
-      unique() %>%
-      sort()
     pyclone_ccf <- matrix(ncol=nregions, nrow=length(all_clusters)) #preparing matrix for resampling
     for (this_cluster in all_clusters) {
-      all_mutations <- mutation_ccf %>%
-        dplyr::as_tibble() %>%
-        dplyr::filter(PycloneCluster == this_cluster)
+      these_mutations <- mutation_ccf_by_cluster[[this_cluster]]
       for (this_region in 1:nregions) {
-        pyclone_ccf[this_cluster,this_region] <- c(mean(sample(dplyr::pull(all_mutations[,this_region]),
-                                                               nrow(all_mutations), replace=T)))
+        pyclone_ccf[this_cluster,this_region] <- c(mean(sample(dplyr::pull(these_mutations[,this_region]),
+                                                               nrow(these_mutations), replace=T)))
       }
     }
     pyclone_ccf <- pyclone_ccf*100
@@ -191,7 +196,6 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
     dplyr::arrange(bic)
 
   summarised_results <- summarised_results %>%
-    dplyr::select(-bic) %>%
     dplyr::mutate(bic = nregions * log(rss/nregions) + ifelse(null == "yes", 1, 2) * log(nregions))
 
   summarised_results <- summarised_results %>%
