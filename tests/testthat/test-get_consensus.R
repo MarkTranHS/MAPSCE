@@ -1,6 +1,6 @@
 #Testing error statements
 test_that("error stops for input data", {
-  mapsce_result <- mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree)
+  mapsce_result <- mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree, print_duration = F)
 
   expect_error(
     get_consensus(mapsce_result, NULL),
@@ -22,7 +22,7 @@ test_that("error stops for input data", {
 
 #Testing the example and correct output
 test_that("correct example mapsce output", {
-  mapsce_result <- mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree)
+  mapsce_result <- mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree, print_duration = F)
   consensus_result <- get_consensus(mapsce_result, example_tree)
   consensus_result_only <- get_consensus(mapsce_result, example_tree, consensus.only = T)
 

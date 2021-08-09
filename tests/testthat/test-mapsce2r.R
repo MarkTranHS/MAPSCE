@@ -28,7 +28,7 @@ test_that("missing tree", {
 
 # Testing mapsce2r example
 test_that("correct example mapsce2r output", {
-  mapsce_result_2r <- mapsce2r(example_cn_2r, example_ccf_2r, example_tree_2r)
+  mapsce_result_2r <- mapsce2r(example_cn_2r, example_ccf_2r, example_tree_2r, print_duration = F)
   expect_s3_class(
     mapsce_result_2r,
     "tbl_df"
@@ -70,7 +70,7 @@ test_that("toy_examples", {
   this_ccf <- matrix(c(100, 0, 100, 100), nrow = 2)
   dimnames(this_ccf) <- list(c("1", "2"), c("R1", "R2"))
   this_tree <- matrix(c("1", "2"), nrow = 1)
-  res <- mapsce2r(this_cn, this_ccf, this_tree)
+  res <- mapsce2r(this_cn, this_ccf, this_tree, print_duration = F)
   expect_equal(
     res$branch[1], "2"
   )
@@ -79,7 +79,7 @@ test_that("toy_examples", {
   this_ccf <- matrix(c(100, 80, 0, 100, 60, 50), nrow = 3)
   dimnames(this_ccf) <- list(c("1", "2", "3"), c("R1", "R2"))
   this_tree <- matrix(c("1", "2", "2", "3"), nrow = 2)
-  res <- mapsce2r(this_cn, this_ccf, this_tree)
+  res <- mapsce2r(this_cn, this_ccf, this_tree, print_duration = F)
   expect_equal(
     res$branch[1], "3"
   )

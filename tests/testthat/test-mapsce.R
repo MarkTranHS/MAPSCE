@@ -24,8 +24,8 @@ test_that("stop errors", {
 
 # Testing mapsce example
 test_that("correct example mapsce output", {
-  mapsce_result <- mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree)
-  mapsce_result_2r <- mapsce(example_cn_2r, example_ccf_2r, example_mutational_ccf, example_tree_2r)
+  mapsce_result <- mapsce(example_cn, example_ccf, example_mutational_ccf, example_tree, print_duration = F)
+  mapsce_result_2r <- mapsce(example_cn_2r, example_ccf_2r, example_mutational_ccf, example_tree_2r, print_duration = F)
   expect_s3_class(
     mapsce_result,
     "tbl_df"
