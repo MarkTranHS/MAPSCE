@@ -143,20 +143,16 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", prin
   # Summarising results
   null_bic <- results_matrix %>%
     dplyr::filter(null == "yes") %>%
-    dplyr::pull(bic) %>%
-    unique()
+    dplyr::pull(bic)
   null_bic <- rep(null_bic, nrow(results_matrix))
   null_bic <- tibble::tibble(null_bic=null_bic)
 
   summarised_results <- results_matrix %>%
-    dplyr::as_tibble() %>%
     cbind(null_bic) %>%
     dplyr::group_by(branch) %>%
+    dplyr::mutate(bic = as.numeric(bic)) %>%
+    dplyr::mutate(bic = ifelse(bic==-Inf, -1*10^100, bic)) %>%
     dplyr::arrange(bic)
-
-  summarised_results$bic <- as.numeric(summarised_results$bic)
-  summarised_results <- summarised_results %>%
-    dplyr::mutate(bic = ifelse(bic==-Inf, -1*10^100, bic))
 
   ## Bayes factors evidence
   all_branches <- summarised_results %>%
