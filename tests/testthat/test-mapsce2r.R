@@ -64,3 +64,23 @@ test_that("correct example mapsce2r output", {
     any(mapsce_result_2r %>% dplyr::filter(evid == 1 | evid == 2) %>% dplyr::pull(index) == 1)
   ) #checking whether best result is always included
 })
+
+test_that("toy_examples", {
+  this_cn <- c(0.9, 0.02)
+  this_ccf <- matrix(c(100, 0, 100, 100), nrow = 2)
+  dimnames(this_ccf) <- list(c("1", "2"), c("R1", "R2"))
+  this_tree <- matrix(c("1", "2"), nrow = 1)
+  res <- mapsce2r(this_cn, this_ccf, this_tree)
+  expect_equal(
+    res$branch[1], "2"
+  )
+
+  this_cn <- c(0.98, 0.5)
+  this_ccf <- matrix(c(100, 80, 0, 100, 60, 50), nrow = 3)
+  dimnames(this_ccf) <- list(c("1", "2", "3"), c("R1", "R2"))
+  this_tree <- matrix(c("1", "2", "2", "3"), nrow = 2)
+  res <- mapsce2r(this_cn, this_ccf, this_tree)
+  expect_equal(
+    res$branch[1], "3"
+  )
+})
