@@ -5,8 +5,8 @@
 #' @param copy_number a numeric vector with copy number values ordered by sample
 #' @param cluster_ccf a matrix with mean CCF values for clones in rows and samples (same order as in copy_number) in columns
 #' @param tree a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.
-#' @param print_raw_matrix printing of raw results
-#' @param print_duration printing of the time taken to run
+#' @param print_raw_matrix logical, printing of raw results
+#' @param print_duration logical, printing of the time taken to run
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -32,7 +32,7 @@
 #'
 
 ## MAPSCE algorithm
-mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", print_duration="yes"){
+mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print_duration = T){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -186,8 +186,8 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix="no", prin
     }
   }
 
-  if(print_raw_matrix=="yes"){print(summarised_results)}
-  if(print_duration=="yes"){print(Sys.time()-start.time)}
+  if(print_raw_matrix==T){print(summarised_results)}
+  if(print_duration==T){print(Sys.time()-start.time)}
 
   summarised_results <- summarised_results %>%
     dplyr::arrange(desc(evid), bic) %>%

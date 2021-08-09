@@ -7,8 +7,8 @@
 #' @param mutation_ccf a tibble or data frame where the first columns contain the mutational CCF values for the  samples (same order as in copy_number) in columns. Tw of the columns in this object need to be "PycloneCluster" and "CleanCluster", the former being the clone assignment and the latter being the PyClone filter (1 for valid clusters, 0 for clusters to be ignored)
 #' @param tree a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.
 #' @param bootstraps number of bootstraps for reclustering of the CCF
-#' @param print_raw_matrix printing of raw results
-#' @param print_duration printing of the time taken to run
+#' @param print_raw_matrix logical, printing of raw results
+#' @param print_duration logical, printing of the time taken to run
 #' @param force_mapsce logical, forcing mapsce to run bootstrapping for patients with 2 regions only
 #' @return a tibble with column names:
 #' \itemize{
@@ -35,7 +35,7 @@
 #'
 
 ## MAPSCE algorithm
-mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix="no", print_duration="yes", force_mapsce = F){
+mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix = F, print_duration = T , force_mapsce = F){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -243,8 +243,8 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
   }
 
 
-  if(print_raw_matrix=="yes"){print(summarised_results)}
-  if(print_duration=="yes"){print(Sys.time()-start.time)}
+  if(print_raw_matrix==T){print(summarised_results)}
+  if(print_duration==T){print(Sys.time()-start.time)}
 
   summarised_results <- summarised_results %>%
     dplyr::arrange(desc(evid), bic) %>%
