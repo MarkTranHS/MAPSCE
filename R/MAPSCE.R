@@ -9,7 +9,7 @@
 #' @param bootstraps number of bootstraps for reclustering of the CCF
 #' @param print_raw_matrix logical, printing of raw results
 #' @param print_duration logical, printing of the time taken to run
-#' @param force_mapsce logical, forcing mapsce to run bootstrapping for patients with 2 regions only
+#' @param force_bootstrap logical, forcing mapsce to run bootstrapping for patients with 2 regions only
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -35,7 +35,7 @@
 #'
 
 ## MAPSCE algorithm
-mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix = F, print_duration = T , force_mapsce = F){
+mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix = F, print_duration = T , force_bootstrap = F){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -55,7 +55,7 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
     stop("mismatch in number of observed copy numbers vs number of regions")
   }
   if(length(copy_number) == 2){
-    if(force_mapsce == F){
+    if(force_bootstrap == F){
       print("running mapsce2r - mapsce for 2 regions")
       summarised_results <- mapsce2r(copy_number, cluster_ccf, tree, print_raw_matrix, print_duration)
       return(summarised_results)

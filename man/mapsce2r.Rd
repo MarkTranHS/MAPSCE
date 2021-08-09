@@ -8,8 +8,8 @@ mapsce2r(
   copy_number,
   cluster_ccf,
   tree,
-  print_raw_matrix = "no",
-  print_duration = "yes"
+  print_raw_matrix = F,
+  print_duration = T
 )
 }
 \arguments{
@@ -19,9 +19,9 @@ mapsce2r(
 
 \item{tree}{a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.}
 
-\item{print_raw_matrix}{printing of raw results}
+\item{print_raw_matrix}{logical, printing of raw results}
 
-\item{print_duration}{printing of the time taken to run}
+\item{print_duration}{logical, printing of the time taken to run}
 }
 \value{
 a tibble with column names:
