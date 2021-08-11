@@ -30,9 +30,8 @@ test_that("correct example mapsce output", {
     consensus_result,
     "double"
   ) #checking the type of consensus_result
-  expect_equal(
-    class(consensus_result),
-    c("matrix", "array")
+  expect_true(
+    any(grepl("matrix", class(consensus_result))),
   )
 
   expect_equal(
