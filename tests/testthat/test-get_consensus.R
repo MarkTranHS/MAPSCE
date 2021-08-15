@@ -12,7 +12,7 @@ test_that("error stops for input data", {
   )
   expect_error(
     get_consensus(mapsce_result[,-1], example_tree),
-    "number of columns in data doesn't match mapsce output"
+    "function needs MAPSCE output with specific column names"
   )
   expect_error(
     get_consensus(mapsce_result, example_tree_2r),

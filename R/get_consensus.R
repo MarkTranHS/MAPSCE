@@ -31,8 +31,8 @@ get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
   if(is.data.frame(data) == F) {
     stop("needs data frame/tibble as input data")
   }
-  if(length(colnames(data)) != 12) {
-    stop("number of columns in data doesn't match mapsce output")
+  if(!all(c("null", "branch", "evid", "before", "after") %in% colnames(data))) {
+    stop("function needs MAPSCE output with specific column names")
   }
   if(nrow(data) != length(unique(as.vector(tree)))) {
     stop("mismatch between data input and number of tree nodes")
