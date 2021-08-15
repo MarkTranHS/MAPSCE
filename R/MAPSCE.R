@@ -10,6 +10,7 @@
 #' @param print_raw_matrix logical, printing of raw results
 #' @param print_duration logical, printing of the time taken to run
 #' @param force_bootstrap logical, forcing mapsce to run bootstrapping for patients with 2 regions only
+#' @param clone_ccf logical, forcing mapsce to use clone CCF instead of just cluster CCF
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -35,7 +36,15 @@
 #'
 
 ## MAPSCE algorithm
-mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100, print_raw_matrix = F, print_duration = T , force_bootstrap = F){
+mapsce <- function(copy_number,
+                   cluster_ccf,
+                   mutation_ccf,
+                   tree,
+                   bootstraps=100,
+                   print_raw_matrix = F,
+                   print_duration = T ,
+                   force_bootstrap = F,
+                   clone_ccf = F){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -48,7 +57,7 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
   if(any(is.na(copy_number))){
     stop("copy number NA")
   }
-  if(ncol(cluster_ccf)==1){
+  if(ncol(cluster_ccf) == 1){
     stop("requires multi region data")
   }
   if(ncol(cluster_ccf) != length(copy_number)){
@@ -133,10 +142,16 @@ mapsce <- function(copy_number, cluster_ccf, mutation_ccf, tree, bootstraps=100,
 
         # New_matrix is a 2-rows matrix with the sum of the clone fractions for the subtree and
         # for the rest of the tree
-        new_matrix <- rbind(colSums(matrix(clone_fraction[subtree, ],
-                                           length(subtree), ncol(clone_fraction))),
-                            colSums(matrix(clone_fraction[rest.of.the.tree, ],
-                                           number_of_clones - length(subtree), ncol(clone_fraction))))
+        if(clone_ccf == T){ #run clone CCF instead of using only cluster CCF
+          new_matrix <- rbind(colSums(matrix(clone_fraction[subtree, ],
+                                             length(subtree), ncol(clone_fraction))),
+                              colSums(matrix(clone_fraction[rest.of.the.tree, ],
+                                             number_of_clones - length(subtree), ncol(clone_fraction))))
+        } else {
+          new_matrix <- rbind(reduced_pyclone_ccf[this_clone,],
+                              100 - reduced_pyclone_ccf[this_clone,])
+        }
+
         new_matrix <- new_matrix / 100 # Divide by 100 as the CCF are in 100%
 
         # Run QP with restriction that all values must be positive (or equal to 0)

@@ -12,7 +12,8 @@ mapsce(
   bootstraps = 100,
   print_raw_matrix = F,
   print_duration = T,
-  force_bootstrap = F
+  force_bootstrap = F,
+  clone_ccf = F
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ mapsce(
 \item{print_duration}{logical, printing of the time taken to run}
 
 \item{force_bootstrap}{logical, forcing mapsce to run bootstrapping for patients with 2 regions only}
+
+\item{clone_ccf}{logical, forcing mapsce to use clone CCF instead of just cluster CCF}
 }
 \value{
 a tibble with column names:

@@ -7,6 +7,7 @@
 #' @param tree a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.
 #' @param print_raw_matrix logical, printing of raw results
 #' @param print_duration logical, printing of the time taken to run
+#' @param clone_ccf logical, forcing mapsce to use clone CCF instead of just cluster CCF
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -32,7 +33,7 @@
 #'
 
 ## MAPSCE algorithm
-mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print_duration = T){
+mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print_duration = T, clone_ccf = F){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -98,12 +99,16 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print
     } else {
       rest.of.the.tree <- setdiff(clones, subtree)
 
-      # New_matrix is a 2-rows matrix with the sum of the clone fractions for the subtree and
-      # for the rest of the tree
-      new_matrix <- rbind(colSums(matrix(clone_fraction[subtree, ],
-                                         length(subtree), ncol(clone_fraction))),
-                          colSums(matrix(clone_fraction[rest.of.the.tree, ],
-                                         number_of_clones - length(subtree), ncol(clone_fraction))))
+      if(clone_ccf == T){ #run clone CCF instead of using only cluster CCF
+        new_matrix <- rbind(colSums(matrix(clone_fraction[subtree, ],
+                                           length(subtree), ncol(clone_fraction))),
+                            colSums(matrix(clone_fraction[rest.of.the.tree, ],
+                                           number_of_clones - length(subtree), ncol(clone_fraction))))
+      } else {
+        new_matrix <- rbind(reduced_pyclone_ccf[this_clone,],
+                            100 - reduced_pyclone_ccf[this_clone,])
+      }
+
       new_matrix <- new_matrix / 100 # Divide by 100 as the CCF are in 100%
 
       # Run QP with restriction that all values must be positive (or equal to 0)

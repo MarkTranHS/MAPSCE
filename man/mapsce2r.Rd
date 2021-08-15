@@ -9,7 +9,8 @@ mapsce2r(
   cluster_ccf,
   tree,
   print_raw_matrix = F,
-  print_duration = T
+  print_duration = T,
+  clone_ccf = F
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ mapsce2r(
 \item{print_raw_matrix}{logical, printing of raw results}
 
 \item{print_duration}{logical, printing of the time taken to run}
+
+\item{clone_ccf}{logical, forcing mapsce to use clone CCF instead of just cluster CCF}
 }
 \value{
 a tibble with column names:
