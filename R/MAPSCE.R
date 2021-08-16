@@ -66,7 +66,12 @@ mapsce <- function(copy_number,
   if(length(copy_number) == 2){
     if(force_bootstrap == F){
       print("running mapsce2r - mapsce for 2 regions")
-      summarised_results <- mapsce2r(copy_number, cluster_ccf, tree, print_raw_matrix, print_duration)
+      summarised_results <- mapsce2r(copy_number = copy_number,
+                                     cluster_ccf = cluster_ccf,
+                                     tree = tree,
+                                     print_raw_matrix = print_raw_matrix,
+                                     print_duration = print_duration,
+                                     clone_ccf = clone_ccf)
       return(summarised_results)
     }
   }
