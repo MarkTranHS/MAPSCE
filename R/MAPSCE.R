@@ -92,10 +92,10 @@ mapsce <- function(copy_number,
     unique() %>%
     sort()
   mutation_ccf_by_cluster = list()
-  for (this_cluster in all_clusters) {
-    mutation_ccf_by_cluster[[this_cluster]] <- mutation_ccf %>%
-      dplyr::filter(PycloneCluster == this_cluster)
-  }
+   for (this_cluster in all_clusters) {
+     mutation_ccf_by_cluster[[this_cluster]] <- mutation_ccf %>%
+       dplyr::filter(PycloneCluster == this_cluster)
+   }
 
   row_number <- 1 #indexing the row number
 
@@ -105,10 +105,8 @@ mapsce <- function(copy_number,
     pyclone_ccf <- matrix(ncol=nregions, nrow=length(all_clusters)) #preparing matrix for resampling
     for (this_cluster in all_clusters) {
       these_mutations <- mutation_ccf_by_cluster[[this_cluster]]
-      for (this_region in 1:nregions) {
-        pyclone_ccf[this_cluster,this_region] <- c(mean(sample(dplyr::pull(these_mutations[,this_region]),
-                                                               nrow(these_mutations), replace=T)))
-      }
+      resampled_rows <- sample(1:nrow(these_mutations), nrow(these_mutations), replace = T)
+      pyclone_ccf[this_cluster, ] <- colMeans(these_mutations[resampled_rows, 1:nregions])
     }
     pyclone_ccf <- pyclone_ccf*100
     rownames(pyclone_ccf) <- all_clusters
@@ -128,7 +126,12 @@ mapsce <- function(copy_number,
 
     #Branch testing with QP
     for (this_clone in clones) {
-
+      if(all(reduced_pyclone_ccf[this_clone,] == 0)){
+        print(paste("It's bootstrap number", this_bootstrap, "it's clone number", this_clone))
+        print("This clone has no mutations in boostrapped clusterCCF")
+        results_matrix <- results_matrix[-row_number,]
+        next()
+      }
       # From the tree object, we read the clone IDs as strings. We want to use
       # the names of the columns in the nested_set matrix
       subtree <- c(this_clone, names(which(nested_set[this_clone, ] == 1)))
@@ -189,6 +192,7 @@ mapsce <- function(copy_number,
         results_matrix[row_number,8] <- null #null
         row_number <- row_number+1
       }
+
     }
   }
   results_matrix <- results_matrix %>% dplyr::as_tibble()
