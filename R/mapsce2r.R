@@ -82,6 +82,12 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print
 
   #Branch testing with QP
   for (this_clone in clones) {
+    if(all(reduced_pyclone_ccf[this_clone,] == 0)){
+      print(paste("It's clone number", this_clone))
+      print("This clone has no mutations in boostrapped clusterCCF")
+      results_matrix <- results_matrix[-row_number,]
+      next()
+    }
 
     # From the tree object, we read the clone IDs as strings. We want to use
     # the names of the columns in the nested_set matrix
