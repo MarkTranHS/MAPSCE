@@ -12,6 +12,7 @@ mapsce(
   bootstraps = 100,
   print_raw_matrix = F,
   print_duration = T,
+  print_mapsce2r = T,
   force_bootstrap = F,
   clone_ccf = F
 )
@@ -30,6 +31,8 @@ mapsce(
 \item{print_raw_matrix}{logical, printing of raw results}
 
 \item{print_duration}{logical, printing of the time taken to run}
+
+\item{print_mapsce2r}{logical, printing whether mapsce is running mapsce2r}
 
 \item{force_bootstrap}{logical, forcing mapsce to run bootstrapping for patients with 2 regions only}
 
