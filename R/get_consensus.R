@@ -4,6 +4,7 @@
 #'
 #' @param data a tibble with summarised mapping results, the output of using mapsce function
 #' @param tree a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.
+#' @param sens sensitivity of the comparison between the mapped values of different branches
 #' @param consensus printing of the consensus
 #' @param consensus.only limiting output to just the consensus, will output a vector instead of a data frame, only works with consensus = TRUE
 #' @return returns a matrix with consensus copy number states for every clone in a tree, labeling no consensus as NAs
@@ -24,7 +25,7 @@
 #' @export
 
 ## Consensus function
-get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
+get_consensus <- function(data, tree, sens = 0.1, consensus=TRUE, consensus.only=F){
   if(length(tree) == 0) {
     stop("missing tree")
   }
@@ -80,7 +81,7 @@ get_consensus <- function(data, tree, consensus=TRUE, consensus.only=F){
   }
 
   if(consensus==TRUE){
-    consensus <- apply(c_tree, 2, function(x) {ifelse(all(abs(x - mean(x))<=0.1), mean(x), NA) } )
+    consensus <- apply(c_tree, 2, function(x) {ifelse(all(abs(x - mean(x))<= sens), mean(x), NA) } )
     c_tree <- rbind(c_tree,consensus)
 
     if(consensus.only==TRUE){

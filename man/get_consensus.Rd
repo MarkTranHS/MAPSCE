@@ -4,12 +4,14 @@
 \alias{get_consensus}
 \title{get_consensus}
 \usage{
-get_consensus(data, tree, consensus = TRUE, consensus.only = F)
+get_consensus(data, tree, sens = 0.1, consensus = TRUE, consensus.only = F)
 }
 \arguments{
 \item{data}{a tibble with summarised mapping results, the output of using mapsce function}
 
 \item{tree}{a matrix listing all the branches in the tree, where the first column is the ancestral node and the second column is the descendant clone. By definition, the root node will only be present in the first column. The clone IDs must correspond to the cluster IDs in cluster_ccf and mutation_ccf.}
+
+\item{sens}{sensitivity of the comparison between the mapped values of different branches}
 
 \item{consensus}{printing of the consensus}
 
