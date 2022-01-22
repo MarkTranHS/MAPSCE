@@ -10,7 +10,8 @@ mapsce2r(
   tree,
   print_raw_matrix = F,
   print_duration = T,
-  clone_ccf = F
+  clone_ccf = F,
+  consensus = T
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ mapsce2r(
 \item{print_duration}{logical, printing of the time taken to run}
 
 \item{clone_ccf}{logical, forcing mapsce to use clone CCF instead of just cluster CCF}
+
+\item{consensus}{logical, forcing mapsce to run the get_consensus function}
 }
 \value{
 a tibble with column names:

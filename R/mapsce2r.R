@@ -8,6 +8,7 @@
 #' @param print_raw_matrix logical, printing of raw results
 #' @param print_duration logical, printing of the time taken to run
 #' @param clone_ccf logical, forcing mapsce to use clone CCF instead of just cluster CCF
+#' @param consensus logical, forcing mapsce to run the get_consensus function
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -33,7 +34,7 @@
 #'
 
 ## MAPSCE algorithm
-mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print_duration = T, clone_ccf = F){
+mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print_duration = T, clone_ccf = F, consensus = T){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -217,6 +218,19 @@ mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print
                     evid = as.numeric(evid),
                     index = as.integer(index)
     )
+  if(consensus == T){
+    consensus_mapping <- get_consensus(summarised_results, tree)
+    viability <- sum(!is.na(consensus_mapping["consensus",]))
+    nresults <-  nrow(consensus_mapping) - 1
+    nclones <- nrow(summarised_results)
+    if(viability < nclones - nresults){
+      evid <- c(1, rep(0, nrow(summarised_results)-1))
+      summarised_results <- summarised_results %>%
+        dplyr::select(-evid) %>%
+        cbind(viability, nresults, evid) %>%
+        dplyr::mutate(top_only = T)
+    }
+  }
 
   return(summarised_results)
 }

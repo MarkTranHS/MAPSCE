@@ -12,6 +12,7 @@
 #' @param print_mapsce2r logical, printing whether mapsce is running mapsce2r
 #' @param force_bootstrap logical, forcing mapsce to run bootstrapping for patients with 2 regions only
 #' @param clone_ccf logical, forcing mapsce to use clone CCF instead of just cluster CCF
+#' @param consensus logical, forcing mapsce to run the get_consensus function
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -46,7 +47,8 @@ mapsce <- function(copy_number,
                    print_duration = T,
                    print_mapsce2r = T,
                    force_bootstrap = F,
-                   clone_ccf = F){
+                   clone_ccf = F,
+                   consensus = T){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -279,5 +281,18 @@ mapsce <- function(copy_number,
     dplyr::mutate(index = dplyr::row_number()) %>%
     dplyr::select(-top_bic, -bic_diff, -null_bic)
 
+  if(consensus == T){
+    consensus_mapping <- get_consensus(summarised_results, tree)
+    viability <- sum(!is.na(consensus_mapping["consensus",]))
+    nresults <-  nrow(consensus_mapping) - 1
+    nclones <- nrow(summarised_results)
+    if(viability < nclones - nresults){
+      evid <- c(1, rep(0, nrow(summarised_results)-1))
+      summarised_results <- summarised_results %>%
+        dplyr::select(-evid) %>%
+        cbind(viability, nresults, evid) %>%
+        dplyr::mutate(top_only = T)
+    }
+  }
   return(summarised_results)
 }

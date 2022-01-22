@@ -14,7 +14,8 @@ mapsce(
   print_duration = T,
   print_mapsce2r = T,
   force_bootstrap = F,
-  clone_ccf = F
+  clone_ccf = F,
+  consensus = T
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ mapsce(
 \item{force_bootstrap}{logical, forcing mapsce to run bootstrapping for patients with 2 regions only}
 
 \item{clone_ccf}{logical, forcing mapsce to use clone CCF instead of just cluster CCF}
+
+\item{consensus}{logical, forcing mapsce to run the get_consensus function}
 }
 \value{
 a tibble with column names:
