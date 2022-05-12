@@ -15,7 +15,9 @@ mapsce(
   print_mapsce2r = T,
   force_bootstrap = F,
   clone_ccf = F,
-  consensus = T
+  consensus = F,
+  before = 0,
+  after = 0
 )
 }
 \arguments{
@@ -40,6 +42,10 @@ mapsce(
 \item{clone_ccf}{logical, forcing mapsce to use clone CCF instead of just cluster CCF}
 
 \item{consensus}{logical, forcing mapsce to run the get_consensus function}
+
+\item{before}{a numeric vector, forcing a CN before}
+
+\item{after}{a numeric vector, forcing a CN after}
 }
 \value{
 a tibble with column names:
@@ -48,13 +54,13 @@ a tibble with column names:
 \item before. copy number state before
 \item after. copy number state after
 \item rss. average residual square of sums of all bootstraps
-\item btn. how many bootstrapped BICs were better than the null's BIC
+\item btn. how many bootstrapped BICs are better than the null's BIC
 \item nregions. number of regions
 \item nclones. number of clones or branches.
 \item null. whether the branch is a trunk or not.
 \item bic. average bic for all bootstraps calculated from mean RSS
-\item bf. the strength of evidence of bayes factor comparison
-\item evid. 1 for good results based on the Bayes Factor comparison and btn
+\item bf. the strength of good_resultence of bayes factor comparison
+\item good_result. 1 for good results based on the Bayes Factor comparison and btn
 \item index. ordering of results.
 }
 }

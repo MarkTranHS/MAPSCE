@@ -13,19 +13,21 @@
 #' @param force_bootstrap logical, forcing mapsce to run bootstrapping for patients with 2 regions only
 #' @param clone_ccf logical, forcing mapsce to use clone CCF instead of just cluster CCF
 #' @param consensus logical, forcing mapsce to run the get_consensus function
+#' @param before a numeric vector, forcing a CN before
+#' @param after a numeric vector, forcing a CN after
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
 #'   \item before. copy number state before
 #'   \item after. copy number state after
 #'   \item rss. average residual square of sums of all bootstraps
-#'   \item btn. how many bootstrapped BICs were better than the null's BIC
+#'   \item btn. how many bootstrapped BICs are better than the null's BIC
 #'   \item nregions. number of regions
 #'   \item nclones. number of clones or branches.
 #'   \item null. whether the branch is a trunk or not.
 #'   \item bic. average bic for all bootstraps calculated from mean RSS
-#'   \item bf. the strength of evidence of bayes factor comparison
-#'   \item evid. 1 for good results based on the Bayes Factor comparison and btn
+#'   \item bf. the strength of good_resultence of bayes factor comparison
+#'   \item good_result. 1 for good results based on the Bayes Factor comparison and btn
 #'   \item index. ordering of results.
 #' }
 #'
@@ -48,7 +50,9 @@ mapsce <- function(copy_number,
                    print_mapsce2r = T,
                    force_bootstrap = F,
                    clone_ccf = F,
-                   consensus = T){
+                   consensus = F,
+                   before = 0,
+                   after = 0){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -77,7 +81,10 @@ mapsce <- function(copy_number,
                                      tree = tree,
                                      print_raw_matrix = print_raw_matrix,
                                      print_duration = print_duration,
-                                     clone_ccf = clone_ccf)
+                                     clone_ccf = clone_ccf,
+                                     consensus = consensus,
+                                     before = before,
+                                     after = after)
       return(summarised_results)
     }
   }
@@ -148,7 +155,7 @@ mapsce <- function(copy_number,
         Dmat <- new_matrix %*% t(new_matrix)
         dvec <- copy_number %*% t(new_matrix)
         Amat <- diag(1)
-        bvec <- c(0)
+        bvec <- c(after)
         k <- 1 #nr of parameters
         null <- "yes"
       } else {
@@ -172,7 +179,7 @@ mapsce <- function(copy_number,
         Dmat <- new_matrix %*% t(new_matrix)
         dvec <- copy_number %*% t(new_matrix)
         Amat <- diag(2) # All positive
-        bvec <- c(0,0)
+        bvec <- c(after,before)
         k <- 2 # Number of parameters
         null <- "no"
       }
@@ -231,7 +238,7 @@ mapsce <- function(copy_number,
   summarised_results <- summarised_results %>%
     dplyr::mutate(bic = ifelse(bic==-Inf, -1*10^100, bic))
 
-  ## Bayes factors evidence
+  ## Bayes factors good_resultence
   all_branches <- summarised_results %>%
     dplyr::pull(branch) %>%
     unique %>%
@@ -252,47 +259,38 @@ mapsce <- function(copy_number,
     cbind(null_bic[1:length(all_branches),]) %>%
     dplyr::as_tibble()
 
-  ## Adding strength of evidence
+  ## Adding strength of good_resultence
   summarised_results <- summarised_results %>%
-    dplyr::mutate(evid = ifelse(bf == 1, 1, 0)) %>%
-    dplyr::mutate(evid = ifelse(btn < 95, 0, evid))
+    dplyr::mutate(good_result = ifelse(bf == 1, 1, 0)) %>%
+    dplyr::mutate(good_result = ifelse(btn < 95, 0, good_result))
 
   ## Not rejected null
-  all_evidence <- summarised_results %>% dplyr::pull(bf)
+  all_good_resultence <- summarised_results %>% dplyr::pull(bf)
   all_btn <- summarised_results %>% dplyr::pull(btn)
-  if(all(all_evidence == 1)){
-    summarised_results <- summarised_results %>% dplyr::mutate(evid = ifelse(null == "yes", 2, 0))
+  if(all(all_good_resultence == 1)){
+    summarised_results <- summarised_results %>% dplyr::mutate(good_result = ifelse(null == "yes", 2, 0))
   } else {
-    if(all(all_btn < 95)){
-      summarised_results <- summarised_results %>% dplyr::mutate(evid = ifelse(null == "yes", 2, 0))
+    if(summarised_results %>% dplyr::filter(null == "yes") %>% dplyr::pull(good_result) == 1){
+      summarised_results <- summarised_results %>% dplyr::mutate(good_result = ifelse(null == "yes", 2, 0))
     } else {
-        if(rlang::is_empty(intersect(which(all_evidence == 1), which(all_btn >= 95)))){
-          summarised_results <- summarised_results %>% dplyr::mutate(evid = ifelse(null == "yes", 2, 0))
+      if(all(all_btn < 95)){
+        summarised_results <- summarised_results %>% dplyr::mutate(good_result = ifelse(null == "yes", 2, 0))
+     } else {
+         if(rlang::is_empty(intersect(which(all_good_resultence == 1), which(all_btn >= 95)))){
+          summarised_results <- summarised_results %>% dplyr::mutate(good_result = ifelse(null == "yes", 2, 0))
+          }
         }
-      }
+    }
   }
-
 
   if(print_raw_matrix==T){print(summarised_results)}
   if(print_duration==T){print(Sys.time()-start.time)}
 
   summarised_results <- summarised_results %>%
-    dplyr::arrange(desc(evid), bic) %>%
+    dplyr::arrange(desc(good_result), bic) %>%
     dplyr::mutate(index = dplyr::row_number()) %>%
     dplyr::select(-top_bic, -bic_diff, -null_bic)
 
-  if(consensus == T){
-    consensus_mapping <- get_consensus(summarised_results, tree)
-    viability <- sum(!is.na(consensus_mapping["consensus",]))
-    nresults <-  nrow(consensus_mapping) - 1
-    nclones <- nrow(summarised_results)
-    if(viability < nclones - nresults){
-      evid <- c(1, rep(0, nrow(summarised_results)-1))
-      summarised_results <- summarised_results %>%
-        dplyr::select(-evid) %>%
-        cbind(viability, nresults, evid) %>%
-        dplyr::mutate(top_only = T)
-    }
-  }
+
   return(summarised_results)
 }

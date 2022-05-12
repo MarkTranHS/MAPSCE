@@ -32,7 +32,7 @@ get_consensus <- function(data, tree, sens = 0.1, consensus=TRUE, consensus.only
   if(is.data.frame(data) == F) {
     stop("needs data frame/tibble as input data")
   }
-  if(!all(c("null", "branch", "evid", "before", "after") %in% colnames(data))) {
+  if(!all(c("null", "branch", "good_result", "before", "after") %in% colnames(data))) {
     stop("function needs MAPSCE output with specific column names")
   }
   if(nrow(data) != length(unique(as.vector(tree)))) {
@@ -42,7 +42,7 @@ get_consensus <- function(data, tree, sens = 0.1, consensus=TRUE, consensus.only
     dplyr::filter(null == "yes") %>%
     dplyr::pull(branch)
   all_branches <- data %>%
-    dplyr::filter(evid >= 1) %>%
+    dplyr::filter(good_result >= 1) %>%
     dplyr::pull(branch) %>% unique
 
   tree_nodes <- NULL
@@ -56,9 +56,8 @@ get_consensus <- function(data, tree, sens = 0.1, consensus=TRUE, consensus.only
                                 right_index = NA)
 
 
-  index_tree(tree)
-  tree_nodes <- tree_nodes %>%
-    dplyr::select(-node_id)
+  tree_nodes <- index_tree(tree) %>%
+    dplyr::rename(branch = node_id)
 
   c_tree <- matrix(nrow = length(all_branches), ncol = nrow(tree_nodes))
   colnames(c_tree) <- tree_nodes[,1] %>% dplyr::pull()
