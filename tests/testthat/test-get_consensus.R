@@ -49,7 +49,7 @@ test_that("correct example mapsce output", {
   ) #checking last row of consensus result is the consensus
 
   expect_equal(
-    mapsce_result %>% dplyr::filter(evid == 1) %>% nrow(),
+    mapsce_result %>% dplyr::filter(good_result == 1) %>% nrow(),
     nrow(consensus_result) - 1
   ) #checking good results number vs number of results used in get_consensus
 
@@ -65,7 +65,7 @@ test_that("correct example mapsce output", {
     length(unique(as.vector(example_tree)))
   ) #checking results when consensus is FALSE
   expect_equal(
-    mapsce_result %>% dplyr::filter(evid == 1) %>% nrow(),
+    mapsce_result %>% dplyr::filter(good_result == 1) %>% nrow(),
     nrow(consensus_result)
   ) #checking results when consensus is FALSE
 })

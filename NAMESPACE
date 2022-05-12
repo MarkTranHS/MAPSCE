@@ -2,6 +2,7 @@
 
 export("%>%")
 export(get_consensus)
+export(interpret_mapsce)
 export(mapsce)
 export(mapsce2r)
 importFrom(magrittr,"%>%")

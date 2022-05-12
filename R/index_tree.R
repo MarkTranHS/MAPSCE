@@ -2,7 +2,7 @@
 #'
 #' `index_tree` indexes all branches in a given tree
 #'
-#' @param tree
+#' @param tree patient tree
 #' @return tibble with indices
 #'
 #'

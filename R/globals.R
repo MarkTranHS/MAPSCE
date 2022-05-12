@@ -1,4 +1,4 @@
-utils::globalVariables(c("branch", "evid", "node_id", "left_index", "tree", "right_index",
+utils::globalVariables(c("min_diff", "consensus_threshold", "format", "graph", "null", "branch", "good_result", "node_id", "left_index", "tree", "right_index",
                          "all.pyclone_trees", "after", "before", "CleanCluster",
                          "PycloneCluster", "bic", "rss", "nclones",
                          ".", "bic_diff", "bf", "btn", "desc", "<<-", ".data",

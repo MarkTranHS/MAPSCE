@@ -6,6 +6,9 @@
 \usage{
 index_tree(tree)
 }
+\arguments{
+\item{tree}{patient tree}
+}
 \value{
 tibble with indices
 }

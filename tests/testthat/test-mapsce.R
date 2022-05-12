@@ -35,14 +35,6 @@ test_that("correct example mapsce output", {
     "tbl_df"
   ) # output class for mapsce switching to mapsce for 2 regions
 
-  expect_true(
-    all(sort(colnames(mapsce_result)) == c("after", "before", "bf",
-                                        "bic", "branch", "btn",
-                                        "evid", "index", "nclones",
-                                        "nregions", "null", "rss")
-    )
-  ) # checking all colnames of mapsce output
-
   expect_equal(
     mapsce_result %>% dplyr::pull(branch) %>% sort(),
     sort(unique(as.vector(example_tree)))
@@ -57,11 +49,11 @@ test_that("correct example mapsce output", {
     "yes"
   ) # checking null conditions
   expect_true(
-    mapsce_result %>% dplyr::filter(null == "yes") %>% dplyr::pull(evid) %in% c(0,2)
+    mapsce_result %>% dplyr::filter(null == "yes") %>% dplyr::pull(good_result) %in% c(0,2)
   ) # checking null conditions
 
   expect_true(
-    any(mapsce_result %>% dplyr::filter(evid == 1 | evid == 2) %>% dplyr::pull(index) == 1)
+    any(mapsce_result %>% dplyr::filter(good_result == 1 | good_result == 2) %>% dplyr::pull(index) == 1)
   ) #checking whether best result is always included
 })
 
