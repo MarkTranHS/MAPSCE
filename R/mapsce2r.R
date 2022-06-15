@@ -36,7 +36,15 @@
 #'
 
 ## MAPSCE algorithm
-mapsce2r <- function(copy_number, cluster_ccf, tree, print_raw_matrix = F, print_duration = T, clone_ccf = F, consensus = F, before = 0, after = 0){
+mapsce2r <- function(copy_number,
+                     cluster_ccf,
+                     tree,
+                     print_raw_matrix = F,
+                     print_duration = T,
+                     clone_ccf = F,
+                     consensus = F,
+                     before = 0,
+                     after = 0){
   start.time <- Sys.time() #timing
 
   #Stop conditions
