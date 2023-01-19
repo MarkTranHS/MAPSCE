@@ -13,7 +13,8 @@ mapsce2r(
   clone_ccf = F,
   consensus = F,
   before = 0,
-  after = 0
+  after = 0,
+  print_warning = T
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ mapsce2r(
 \item{before}{a numeric vector, forcing a CN before}
 
 \item{after}{a numeric vector, forcing a CN after}
+
+\item{print_warning}{a logical vector, option to print the warning messages}
 }
 \value{
 a tibble with column names:

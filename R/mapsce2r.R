@@ -11,6 +11,7 @@
 #' @param consensus logical, forcing mapsce to run the get_consensus function
 #' @param before a numeric vector, forcing a CN before
 #' @param after a numeric vector, forcing a CN after
+#' @param print_warning a logical vector, option to print the warning messages
 #' @return a tibble with column names:
 #' \itemize{
 #'   \item branch. branch ID
@@ -44,7 +45,8 @@ mapsce2r <- function(copy_number,
                      clone_ccf = F,
                      consensus = F,
                      before = 0,
-                     after = 0){
+                     after = 0,
+                     print_warning = T){
   start.time <- Sys.time() #timing
 
   #Stop conditions
@@ -64,7 +66,9 @@ mapsce2r <- function(copy_number,
     stop("mismatch in number of observed copy numbers vs number of regions")
   }
   if(length(copy_number) != 2){
-    stop("this mapsce mode needs 2 regions only")
+    if(print_warning == T){
+      warning("this mapsce mode needs 2 regions only")
+    }
   }
 
   #List of all clone IDs from tree - continue results

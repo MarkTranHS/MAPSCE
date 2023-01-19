@@ -11,6 +11,7 @@
 #' @param print_duration logical, printing of the time taken to run
 #' @param print_mapsce2r logical, printing whether mapsce is running mapsce2r
 #' @param force_bootstrap logical, forcing mapsce to run bootstrapping for patients with 2 regions only
+#' @param force_mapsce2r logical, forcing mapsce to always run mapsce2r without bootstraping, regardless of number of regions
 #' @param clone_ccf logical, forcing mapsce to use clone CCF instead of just cluster CCF
 #' @param consensus logical, forcing mapsce to run the get_consensus function
 #' @param before a numeric vector, forcing a CN before
@@ -49,6 +50,7 @@ mapsce <- function(copy_number,
                    print_duration = T,
                    print_mapsce2r = T,
                    force_bootstrap = F,
+                   force_mapsce2r = F,
                    clone_ccf = F,
                    consensus = F,
                    before = 0,
@@ -71,6 +73,25 @@ mapsce <- function(copy_number,
   if(ncol(cluster_ccf) != length(copy_number)){
     stop("mismatch in number of observed copy numbers vs number of regions")
   }
+  if(force_mapsce2r == T){
+    if(force_bootstrap == T){
+      stop("cannot run mapsce2r with bootstrapping")
+    }
+    if(print_mapsce2r == T){
+      print("running mapsce2r - mapsce for 2 regions")
+    }
+    summarised_results <- mapsce2r(copy_number = copy_number,
+                                   cluster_ccf = cluster_ccf,
+                                   tree = tree,
+                                   print_raw_matrix = print_raw_matrix,
+                                   print_duration = print_duration,
+                                   clone_ccf = clone_ccf,
+                                   consensus = consensus,
+                                   before = before,
+                                   after = after)
+    return(summarised_results)
+  }
+
   if(length(copy_number) == 2){
     if(force_bootstrap == F){
       if(print_mapsce2r == T){

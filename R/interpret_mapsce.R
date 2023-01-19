@@ -55,12 +55,15 @@ interpret_mapsce <- function(data, tree, min_diff = 0.4, consensus_threshold = 0
   number_of_results <-  data %>% dplyr::filter(good_result >= 1) %>% nrow()
   nclones <- nrow(data)
   consistency_filter <- F
+  consensus_mapping_flag <- F
+
   data <- data %>% dplyr::arrange(desc(good_result))
 
   # more than 1 good result
   if(number_of_results > 1){
     number_of_nonNAs <- sum(!is.na(consensus_mapping["consensus",]))
     number_of_NAs <- nclones - number_of_nonNAs
+    consensus_mapping_flag <- T
     if(number_of_nonNAs <= 1 & number_of_results - 1 < number_of_NAs){
     data[2:nrow(data),"good_result"] <- 0
     consistency_filter <- T
@@ -101,12 +104,14 @@ interpret_mapsce <- function(data, tree, min_diff = 0.4, consensus_threshold = 0
     interpretation_result <- tibble::tibble(branch = list(branch),
                                             clonality = clonality,
                                             consistency_filter = consistency_filter,
+                                            consensus_mapping_flag = consensus_mapping_flag,
                                             node_ids = list(colnames(consensus_mapping)),
                                             consensus_mapping = list(consensus_mapping[nrow(consensus_mapping),]))
     if(format == "list"){
       interpretation_result <- list(branch = branch,
                                     clonality = clonality,
                                     consistency_filter = consistency_filter,
+                                    consensus_mapping_flag = consensus_mapping_flag,
                                     node_ids = list(colnames(consensus_mapping)),
                                     consensus_mapping = consensus_mapping)
 

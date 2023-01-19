@@ -14,6 +14,7 @@ mapsce(
   print_duration = T,
   print_mapsce2r = T,
   force_bootstrap = F,
+  force_mapsce2r = F,
   clone_ccf = F,
   consensus = F,
   before = 0,
@@ -38,6 +39,8 @@ mapsce(
 \item{print_mapsce2r}{logical, printing whether mapsce is running mapsce2r}
 
 \item{force_bootstrap}{logical, forcing mapsce to run bootstrapping for patients with 2 regions only}
+
+\item{force_mapsce2r}{logical, forcing mapsce to always run mapsce2r without bootstraping, regardless of number of regions}
 
 \item{clone_ccf}{logical, forcing mapsce to use clone CCF instead of just cluster CCF}
 

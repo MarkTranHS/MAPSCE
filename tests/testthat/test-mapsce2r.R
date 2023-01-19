@@ -20,7 +20,7 @@ test_that("missing tree", {
     mapsce2r(example_cn_2r[-1], example_ccf_2r, example_tree_2r),
     "mismatch in number of observed copy numbers vs number of regions"
   )
-  expect_error(
+  expect_warning(
     mapsce2r(example_cn, example_ccf, example_tree_2r),
     "this mapsce mode needs 2 regions only"
   )

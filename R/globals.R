@@ -3,4 +3,4 @@ utils::globalVariables(c("min_diff", "consensus_threshold", "format", "graph", "
                          "PycloneCluster", "bic", "rss", "nclones",
                          ".", "bic_diff", "bf", "btn", "desc", "<<-", ".data",
                          "this_node", "this_index", "this_tree",
-                         "tree_nodes", "parent_id", "child", "tree", "patient", "index", "parent"))
+                         "tree_nodes", "parent_id", "child", "tree", "patient", "index", "parent", "print_warning", "bootstrap"))
