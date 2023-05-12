@@ -54,6 +54,7 @@ mapsce <- function(copy_number,
                    clone_ccf = F,
                    consensus = F,
                    before = 0,
+                   max_before = NULL,
                    after = 0){
   start.time <- Sys.time() #timing
 
@@ -88,6 +89,7 @@ mapsce <- function(copy_number,
                                    clone_ccf = clone_ccf,
                                    consensus = consensus,
                                    before = before,
+                                   max_before = max_before,
                                    after = after)
     return(summarised_results)
   }
@@ -105,6 +107,7 @@ mapsce <- function(copy_number,
                                      clone_ccf = clone_ccf,
                                      consensus = consensus,
                                      before = before,
+                                     max_before = max_before,
                                      after = after)
       return(summarised_results)
     }
@@ -200,7 +203,12 @@ mapsce <- function(copy_number,
         Dmat <- new_matrix %*% t(new_matrix)
         dvec <- copy_number %*% t(new_matrix)
         Amat <- diag(2) # All positive
-        bvec <- c(after,before)
+        if (!is.null(max_before)) {
+          Amat[2, 2] <- -1 # All positive
+          bvec <- c(after, -max_before)
+        } else {
+          bvec <- c(after,before)
+        }
         k <- 2 # Number of parameters
         null <- "no"
       }
