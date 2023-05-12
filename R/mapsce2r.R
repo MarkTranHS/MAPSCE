@@ -45,6 +45,7 @@ mapsce2r <- function(copy_number,
                      clone_ccf = F,
                      consensus = F,
                      before = 0,
+                     max_before = NULL,
                      after = 0,
                      print_warning = T){
   start.time <- Sys.time() #timing
@@ -137,7 +138,12 @@ mapsce2r <- function(copy_number,
       Dmat <- new_matrix %*% t(new_matrix)
       dvec <- copy_number %*% t(new_matrix)
       Amat <- diag(2) # All positive
-      bvec <- c(after,before)
+      if (!is.null(max_before)) {
+        Amat[2, 2] <- -1 # All positive
+        bvec <- c(after, -max_before)
+      } else {
+        bvec <- c(after, before)
+      }
       k <- 2 # Number of parameters
       null <- "no"
     }
