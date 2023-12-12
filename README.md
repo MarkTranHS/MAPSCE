@@ -13,7 +13,7 @@ trees.
 MAPSCE is described in detail in: [Tran, H. S. (2023). Integrating
 multi-omics data by mapping subclonal events on tumour evolutionary
 trees. UCL (University College
-London).](https://discovery.ucl.ac.uk/id/eprint/10180204/).
+London).](https://discovery.ucl.ac.uk/id/eprint/10180204/)
 
 ## Installation
 
